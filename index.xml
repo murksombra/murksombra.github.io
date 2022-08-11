@@ -6,15 +6,14 @@
     <description>Recent content on Sombra Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Thu, 11 Aug 2022 12:07:31 -0300</lastBuildDate><atom:link href="https://sombra.github.io/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Thu, 11 Aug 2022 12:40:38 -0300</lastBuildDate><atom:link href="https://sombra.github.io/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Init</title>
       <link>https://sombra.github.io/posts/init/</link>
-      <pubDate>Thu, 11 Aug 2022 12:07:31 -0300</pubDate>
+      <pubDate>Thu, 11 Aug 2022 12:40:38 -0300</pubDate>
       
       <guid>https://sombra.github.io/posts/init/</guid>
-      <description>Hello fr13nd&amp;hellip; Welcome to my blog. It&amp;rsquo;s been a while since I wanted to created something like this. I&amp;rsquo;m a computer scientist that fights agains bits and massages polynomials.
-println!(&amp;#34;Hello Fr13nd&amp;#34;); </description>
+      <description>Where it all begins. More yet to come.</description>
     </item>
     
   </channel>
