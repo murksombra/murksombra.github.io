@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+    <title>124-22-125-46-345</title>
+    <meta content="text/html;charset=utf-8" http-equiv="Content-Type">
+    <meta content="utf-8" http-equiv="encoding">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="theme-color" content="#000084" />
+    <link rel="icon" href="//favicon.ico">
+    <link rel="canonical" href="/">
+    
+    
+</head>
+<body>
+<nav class="navbar navbar-inverse navbar-fixed-top">
+    <div class="navbar-inner">
+        <div class="container">
+            <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse"></button>
+            <a class="brand" href="/">124-22-125-46-345</a>
+            <div class="nav-collapse collapse">
+                <ul class="nav">
+                    
+                    
+                        
+                            <li>
+                                <a href="/about/">
+                                    
+                                    <span>About</span>
+                                </a>
+                            </li>
+                        
+                    
+                        
+                            <li>
+                                <a href="/post/">
+                                    
+                                    <span>All posts</span>
+                                </a>
+                            </li>
+                        
+                    
+                </ul>
+            </div>
+        </div>
+    </div>
+</nav><div id="content" class="container">
+
+<div class="row-fluid navmargin">
+    <div class="page-header">
+        <h1>Brain Overflow - Thu, Jan 19, 2023</h1>
+    </div>
+    <p class="lead"></p>
+    <h2 id="brain-buffer-overflow">Brain (Buffer) Overflow</h2>
+<h4 id="what-happens-if-you-try-to-access-some-extra-part-of-computer-memory-what-is-memory-what-could-go-wrong-if-our-program-doesnt-check-for-boundaries">What happens if you try to access some &ldquo;extra&rdquo; part of computer memory? What is memory? What could go wrong if our program doesn&rsquo;t check for boundaries?</h4>
+<p>Well, that&rsquo;s what we&rsquo;ll be seing in this post.</p>
+<h4 id="buffers">Buffers</h4>
+<p>According with our good old friend Wikipedia, buffers can be described as a region of a memory used to temporarily store data while it is being moved from one place to another. So it basically act as a container of some sort that allow data to be persisted for some period of time and, obviously enough, it is a fundamental part of any computer system/program.</p>
+<h4 id="exploits">Exploits</h4>
+<p>Since this is the very first blog post, I think that will cause no harm to use a fell lines to describe what an exploit is. Cutting the chase, an exploit is a piece of code that trigger a vulnerability and cause a lot of trouble for the blue teams :)</p>
+<p>Going a bit further, most of the exploits &ndash; at least the old ones &ndash; have some sort of memory corruption step. By doing that, the hacker&rsquo;s goal is almost always take over control of the execution flow of the program and then redirect it to wherever the attacker sees fit. On Intel platforms for example, imagine that you create a beautiful and super secure piece of code as the following:</p>
+<pre><code># include &lt;stdio.h&gt;
+# include &lt;string.h&gt;
+
+void int main(int argc, char *argv[]){
+	int value = 666;
+	char buffer_a[13], buffer_b[13];
+
+	//copying some values to the buffer
+	strcpy(buffer_a,&quot;hacks&quot;);
+	strcpy(buffer_b,&quot;msdos&quot;);
+
+	printf(&quot;[BEFORE MADNESS] buffer_a is at %p and contains \'%s'\n&quot;, buffer_a, buffer_a);
+	printf(&quot;[BEFORE MADNESS] buffer_b is at %p and contains \'%s'\n&quot;, buffer_b, buffer_b);
+
+	//Gateway to hell happening next lol
+	printf(&quot;[!] Copying argv bytes into buffer_b, hold.&quot;);
+	strcpy(buffer_b, argv[1]);
+	
+	printf(&quot;[MADNESS] buffer_a is at %p and contains \'%s'\n&quot;, buffer_a, buffer_a);
+	printf(&quot;[MADNESS] buffer_b is at %p and contains \'%s'\n&quot;, buffer_b, buffer_b);
+	printf(&quot;[MADNESS] value is at %p and is was set to %d(0x%08x)\n&quot;, &amp;value, value, value);
+
+
+}
+</code></pre><p>After compiling it with gcc, we got the following result:</p>
+<p>Ahá! We were able to input weird and unexpected values into buffers and variables. Cool for us, terrible for them.</p>
+<h4 id="whats-going-on">What&rsquo;s going on?</h4>
+<p>If you pay attention in to the details, you&rsquo;ll see that the buffers were create one next to each other and the extra bytes ended on the next buffer. In this scenario, if we provide a large enough input we&rsquo;ll also be able to overwrite the variable as well.</p>
+<h4 id="developers-mistake">Developers mistake</h4>
+<p>This kind of problem is way far common that you may think. Developers often forget to perform boundary checks when dealing with buffers and memory. ALWAYS CHECK FOR LENGTH AND DO NOT TRUST ANY &ndash; ANY &ndash; USER INPUT.</p>
+<h4 id="going-further">Going further&hellip;</h4>
+<p>If you manage to open this very simple program in a debugger, such as gdb, you&rsquo;ll see that we can take over control of some very important and badass pointer: EIP/RIP.
+EIP/RIP is the guy who instruct the execution flow to it&rsquo;s next destination, which means that if we can control it, we&rsquo;ll be able to inject code, jump to specific memory addresses etc. Since this register have limited space (couple bytes) it&rsquo;s not possible for us to put our shellcode (comming up in the next posts) on those few little bytes. What we should do instead is to:</p>
+<ol>
+<li>
+<p>Pray to the vinking gods of hacking to remove ASLR-like mechanisms (more about in next posts)</p>
+</li>
+<li>
+<p>Find where in the memory (the address) is our code</p>
+</li>
+<li>
+<p>Create a shellcode</p>
+</li>
+<li>
+<p>Check for the sizes and add some NOP operations  (NOP sled) so nobody gets harm :)</p>
+</li>
+</ol>
+
+    <h4><a href="/">Back to Home</a></h4>
+</div>
+
+
+        </div><footer class="container">
+    <hr class="soften">
+    <p>
+&copy; 
+
+    sombra.sh
+
+<span id="thisyear">2023</span>
+
+    | Sombra
+
+
+</p>
+    <p class="text-center">
+        
+        <a href="https://twitter.com/murksombra">Twitter</a> 
+        <a href="https://linkedin.com/in/dalmoveras">Linkedin</a> 
+        <a href="https://github.com/murksombra">GitHub</a> 
+        
+    </p>
+</footer>
+
+</body><link rel="stylesheet" href="/css/bootstrap.css">
+<link rel="stylesheet" href="/css/bootstrap-responsive.css">
+<link rel="stylesheet" href="/css/style.css">
+
+<script src="/js/jquery.js"></script>
+<script src="/js/bootstrap-386.js"></script>
+<script src="/js/bootstrap-transition.js"></script>
+<script src="/js/bootstrap-alert.js"></script>
+<script src="/js/bootstrap-modal.js"></script>
+<script src="/js/bootstrap-dropdown.js"></script>
+<script src="/js/bootstrap-scrollspy.js"></script>
+<script src="/js/bootstrap-tab.js"></script>
+<script src="/js/bootstrap-tooltip.js"></script>
+<script src="/js/bootstrap-popover.js"></script>
+<script src="/js/bootstrap-button.js"></script>
+<script src="/js/bootstrap-collapse.js"></script>
+<script src="/js/bootstrap-carousel.js"></script>
+<script src="/js/bootstrap-typeahead.js"></script>
+<script src="/js/bootstrap-affix.js"></script>
+<script>
+    _386 = { 
+        fastLoad: false ,
+        onePass: true , 
+        speedFactor: 3 
+    };
+
+    
+    function ThisYear() {
+        document.getElementById('thisyear').innerHTML = new Date().getFullYear();
+    };
+</script>
+</html>
