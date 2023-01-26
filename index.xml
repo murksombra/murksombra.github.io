@@ -2,36 +2,36 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>124-22-125-46-345</title>
-    <link>https://murksoombra.github.io/</link>
+    <link>sombra.sh/</link>
     <description>Recent content on 124-22-125-46-345</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Thu, 19 Jan 2023 20:24:05 -0800</lastBuildDate><atom:link href="https://murksoombra.github.io/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Thu, 19 Jan 2023 20:24:05 -0800</lastBuildDate><atom:link href="sombra.sh/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Brain Overflow</title>
-      <link>https://murksoombra.github.io/post/brain-overflow/</link>
+      <link>sombra.sh/post/brain-overflow/</link>
       <pubDate>Thu, 19 Jan 2023 20:24:05 -0800</pubDate>
       
-      <guid>https://murksoombra.github.io/post/brain-overflow/</guid>
+      <guid>sombra.sh/post/brain-overflow/</guid>
       <description>Brain (Buffer) Overflow What happens if you try to access some &amp;ldquo;extra&amp;rdquo; part of computer memory? What is memory? What could go wrong if our program doesn&amp;rsquo;t check for boundaries? Well, that&amp;rsquo;s what we&amp;rsquo;ll be seing in this post.
 Buffers According with our good old friend Wikipedia, buffers can be described as a region of a memory used to temporarily store data while it is being moved from one place to another.</description>
     </item>
     
     <item>
       <title>About</title>
-      <link>https://murksoombra.github.io/about/</link>
+      <link>sombra.sh/about/</link>
       <pubDate>Wed, 28 Dec 2022 00:00:00 +0000</pubDate>
       
-      <guid>https://murksoombra.github.io/about/</guid>
+      <guid>sombra.sh/about/</guid>
       <description>I’m too nerdy for the rockstart, too rock n’ roll for the nerds. I’m an open minded person who tries to challenge the status quo by questioning the obvious things. The WHY drives my curiosity. In computer science I’ve found my passion and was matter of time until I discovered the underground. I’ve worked as a programmer for Artificial intelligence companies, as a Security analyst for tradi banks and as a Red teammer for a defense contractor.</description>
     </item>
     
     <item>
       <title></title>
-      <link>https://murksoombra.github.io/archives/</link>
+      <link>sombra.sh/archives/</link>
       <pubDate>Tue, 28 May 2019 00:00:00 +0000</pubDate>
       
-      <guid>https://murksoombra.github.io/archives/</guid>
+      <guid>sombra.sh/archives/</guid>
       <description></description>
     </item>
     
