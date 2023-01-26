@@ -2,26 +2,26 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Tags on 124-22-125-46-345</title>
-    <link>sombra.sh/tags/</link>
+    <link>/tags/</link>
     <description>Recent content in Tags on 124-22-125-46-345</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Thu, 19 Jan 2023 20:24:05 -0800</lastBuildDate><atom:link href="sombra.sh/tags/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Thu, 19 Jan 2023 20:24:05 -0800</lastBuildDate><atom:link href="/tags/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>intro</title>
-      <link>sombra.sh/tags/intro/</link>
+      <link>/tags/intro/</link>
       <pubDate>Thu, 19 Jan 2023 20:24:05 -0800</pubDate>
       
-      <guid>sombra.sh/tags/intro/</guid>
+      <guid>/tags/intro/</guid>
       <description></description>
     </item>
     
     <item>
       <title>personal</title>
-      <link>sombra.sh/tags/personal/</link>
+      <link>/tags/personal/</link>
       <pubDate>Wed, 28 Dec 2022 00:00:00 +0000</pubDate>
       
-      <guid>sombra.sh/tags/personal/</guid>
+      <guid>/tags/personal/</guid>
       <description></description>
     </item>
     
