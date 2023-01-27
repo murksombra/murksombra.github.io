@@ -3,26 +3,26 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
-    <loc>sombra.sh/posts/brain-overflow/</loc>
+    <loc>/posts/brain-overflow/</loc>
     <lastmod>2023-01-19T20:24:05-08:00</lastmod>
   </url>
   
   <url>
-    <loc>sombra.sh/posts/</loc>
+    <loc>/posts/</loc>
     <lastmod>2023-01-19T20:24:05-08:00</lastmod>
   </url>
   
   <url>
-    <loc>sombra.sh/</loc>
+    <loc>/</loc>
     <lastmod>2023-01-19T20:24:05-08:00</lastmod>
   </url>
   
   <url>
-    <loc>sombra.sh/categories/</loc>
+    <loc>/categories/</loc>
   </url>
   
   <url>
-    <loc>sombra.sh/tags/</loc>
+    <loc>/tags/</loc>
   </url>
   
 </urlset>

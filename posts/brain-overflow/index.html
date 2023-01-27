@@ -1,16 +1,16 @@
 <!DOCTYPE html>
 <html lang="en-us">
 <head>
-  <link rel="preload" href="/sombra.sh/lib/font-awesome/webfonts/fa-brands-400.woff2" as="font" type="font/woff2" crossorigin="anonymous">
-  <link rel="preload" href="/sombra.sh/lib/font-awesome/webfonts/fa-regular-400.woff2" as="font" type="font/woff2" crossorigin="anonymous">
-  <link rel="preload" href="/sombra.sh/lib/font-awesome/webfonts/fa-solid-900.woff2" as="font" type="font/woff2" crossorigin="anonymous">
-  <link rel="preload" href="/sombra.sh/lib/JetBrainsMono/web/woff2/JetBrainsMono-Regular.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+  <link rel="preload" href="/lib/font-awesome/webfonts/fa-brands-400.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+  <link rel="preload" href="/lib/font-awesome/webfonts/fa-regular-400.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+  <link rel="preload" href="/lib/font-awesome/webfonts/fa-solid-900.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+  <link rel="preload" href="/lib/JetBrainsMono/web/woff2/JetBrainsMono-Regular.woff2" as="font" type="font/woff2" crossorigin="anonymous">
   <script type="text/javascript" src="https://latest.cactus.chat/cactus.js"></script>
   <link rel="stylesheet" href="https://latest.cactus.chat/style.css" type="text/css">
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <title> Brain Overflow | Sombra&#39;s Blog</title>
-  <link rel = 'canonical' href = 'sombra.sh/posts/brain-overflow/'>
+  <link rel = 'canonical' href = '/posts/brain-overflow/'>
   <meta name="description" content="Most of my career has been dedicate to build critical system using: Rust, C and Python. Besides that, I had the opportunity to work in a defense/military contractor which exposed me to offensive security procedures and techniques such as: fuzzing, reverse engineering and low level programming (ASM x86 Intel). Here you&#39;ll find some notes, thoughts and tribal knowledge gathered during my adventures.">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="robots" content="all,follow">
@@ -19,7 +19,7 @@
 <meta property="og:description" content="Brain (Buffer) Overflow What happens if you try to access some &ldquo;extra&rdquo; part of computer memory? What is memory? What could go wrong if our program doesn&rsquo;t check for boundaries? Well, that&rsquo;s what we&rsquo;ll be seing in this post.
 Buffers According with our good old friend Wikipedia, buffers can be described as a region of a memory used to temporarily store data while it is being moved from one place to another." />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="sombra.sh/posts/brain-overflow/" />
+<meta property="og:url" content="/posts/brain-overflow/" />
 <meta property="article:published_time" content="2023-01-19T20:24:05-08:00" />
 <meta property="article:modified_time" content="2023-01-19T20:24:05-08:00" />
 
@@ -33,7 +33,7 @@ Buffers According with our good old friend Wikipedia, buffers can be described a
     
   
   
-  <link rel="stylesheet" href="/sombra.sh/css/styles.94f653e9e151e28067a7c5dbbc4600cbd5a3c721e79faaf971e523c40f3b249b8e4f20bb57810dfffa8d559ca5c140fd56eb4cd9c0853113ad08e66afdb08bdd.css" integrity="sha512-lPZT6eFR4oBnp8XbvEYAy9WjxyHnn6r5ceUjxA87JJuOTyC7V4EN//qNVZylwUD9VutM2cCFMROtCOZq/bCL3Q=="> 
+  <link rel="stylesheet" href="/css/styles.94f653e9e151e28067a7c5dbbc4600cbd5a3c721e79faaf971e523c40f3b249b8e4f20bb57810dfffa8d559ca5c140fd56eb4cd9c0853113ad08e66afdb08bdd.css" integrity="sha512-lPZT6eFR4oBnp8XbvEYAy9WjxyHnn6r5ceUjxA87JJuOTyC7V4EN//qNVZylwUD9VutM2cCFMROtCOZq/bCL3Q=="> 
 
   
   
@@ -45,7 +45,7 @@ Buffers According with our good old friend Wikipedia, buffers can be described a
   
 
   
-<link rel="icon" type="image/png" href="sombra.sh/images/favicon.ico" />
+<link rel="icon" type="image/png" href="images/favicon.ico" />
 
   
   
@@ -64,13 +64,13 @@ Buffers According with our good old friend Wikipedia, buffers can be described a
     <span id="nav">
       <ul>
          
-        <li><a href="sombra.sh/">Home</a></li>
+        <li><a href="/">Home</a></li>
          
-        <li><a href="sombra.sh/posts">Writings</a></li>
+        <li><a href="/posts">Writings</a></li>
          
-        <li><a href="sombra.sh/tags">Tags</a></li>
+        <li><a href="/tags">Tags</a></li>
          
-        <li><a href="sombra.sh/about">About</a></li>
+        <li><a href="/about">About</a></li>
         
       </ul>
     </span>
@@ -105,47 +105,47 @@ Buffers According with our good old friend Wikipedia, buffers can be described a
   
   
   <li>
-    <a class="icon" href="http://www.facebook.com/sharer.php?u=sombra.sh%2fposts%2fbrain-overflow%2f" aria-label="Facebook">
+    <a class="icon" href="http://www.facebook.com/sharer.php?u=%2fposts%2fbrain-overflow%2f" aria-label="Facebook">
       <i class="fab fa-facebook " aria-hidden="true"></i>
     </a>
   </li>
   <li>
-    <a class="icon" href="https://twitter.com/share?url=sombra.sh%2fposts%2fbrain-overflow%2f&text=Brain%20Overflow" aria-label="Twitter">
+    <a class="icon" href="https://twitter.com/share?url=%2fposts%2fbrain-overflow%2f&text=Brain%20Overflow" aria-label="Twitter">
       <i class="fab fa-twitter " aria-hidden="true"></i>
     </a>
   </li>
   <li>
-    <a class="icon" href="http://www.linkedin.com/shareArticle?url=sombra.sh%2fposts%2fbrain-overflow%2f&title=Brain%20Overflow" aria-label="Linkedin">
+    <a class="icon" href="http://www.linkedin.com/shareArticle?url=%2fposts%2fbrain-overflow%2f&title=Brain%20Overflow" aria-label="Linkedin">
       <i class="fab fa-linkedin " aria-hidden="true"></i>
     </a>
   </li>
   <li>
-    <a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=sombra.sh%2fposts%2fbrain-overflow%2f&is_video=false&description=Brain%20Overflow" aria-label="Pinterest">
+    <a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=%2fposts%2fbrain-overflow%2f&is_video=false&description=Brain%20Overflow" aria-label="Pinterest">
       <i class="fab fa-pinterest " aria-hidden="true"></i>
     </a>
   </li>
   <li>
-    <a class="icon" href="mailto:?subject=Brain%20Overflow&body=Check out this article: sombra.sh%2fposts%2fbrain-overflow%2f" aria-label="Email">
+    <a class="icon" href="mailto:?subject=Brain%20Overflow&body=Check out this article: %2fposts%2fbrain-overflow%2f" aria-label="Email">
       <i class="fas fa-envelope " aria-hidden="true"></i>
     </a>
   </li>
   <li>
-    <a class="icon" href="https://getpocket.com/save?url=sombra.sh%2fposts%2fbrain-overflow%2f&title=Brain%20Overflow" aria-label="Pocket">
+    <a class="icon" href="https://getpocket.com/save?url=%2fposts%2fbrain-overflow%2f&title=Brain%20Overflow" aria-label="Pocket">
       <i class="fab fa-get-pocket " aria-hidden="true"></i>
     </a>
   </li>
   <li>
-    <a class="icon" href="http://reddit.com/submit?url=sombra.sh%2fposts%2fbrain-overflow%2f&title=Brain%20Overflow" aria-label="reddit">
+    <a class="icon" href="http://reddit.com/submit?url=%2fposts%2fbrain-overflow%2f&title=Brain%20Overflow" aria-label="reddit">
       <i class="fab fa-reddit " aria-hidden="true"></i>
     </a>
   </li>
   <li>
-    <a class="icon" href="http://www.tumblr.com/share/link?url=sombra.sh%2fposts%2fbrain-overflow%2f&name=Brain%20Overflow&description=Brain%20%28Buffer%29%20Overflow%20What%20happens%20if%20you%20try%20to%20access%20some%20%26ldquo%3bextra%26rdquo%3b%20part%20of%20computer%20memory%3f%20What%20is%20memory%3f%20What%20could%20go%20wrong%20if%20our%20program%20doesn%26rsquo%3bt%20check%20for%20boundaries%3f%20Well%2c%20that%26rsquo%3bs%20what%20we%26rsquo%3bll%20be%20seing%20in%20this%20post.%0aBuffers%20According%20with%20our%20good%20old%20friend%20Wikipedia%2c%20buffers%20can%20be%20described%20as%20a%20region%20of%20a%20memory%20used%20to%20temporarily%20store%20data%20while%20it%20is%20being%20moved%20from%20one%20place%20to%20another." aria-label="Tumblr">
+    <a class="icon" href="http://www.tumblr.com/share/link?url=%2fposts%2fbrain-overflow%2f&name=Brain%20Overflow&description=Brain%20%28Buffer%29%20Overflow%20What%20happens%20if%20you%20try%20to%20access%20some%20%26ldquo%3bextra%26rdquo%3b%20part%20of%20computer%20memory%3f%20What%20is%20memory%3f%20What%20could%20go%20wrong%20if%20our%20program%20doesn%26rsquo%3bt%20check%20for%20boundaries%3f%20Well%2c%20that%26rsquo%3bs%20what%20we%26rsquo%3bll%20be%20seing%20in%20this%20post.%0aBuffers%20According%20with%20our%20good%20old%20friend%20Wikipedia%2c%20buffers%20can%20be%20described%20as%20a%20region%20of%20a%20memory%20used%20to%20temporarily%20store%20data%20while%20it%20is%20being%20moved%20from%20one%20place%20to%20another." aria-label="Tumblr">
       <i class="fab fa-tumblr " aria-hidden="true"></i>
     </a>
   </li>
   <li>
-    <a class="icon" href="https://news.ycombinator.com/submitlink?u=sombra.sh%2fposts%2fbrain-overflow%2f&t=Brain%20Overflow" aria-label="Hacker News">
+    <a class="icon" href="https://news.ycombinator.com/submitlink?u=%2fposts%2fbrain-overflow%2f&t=Brain%20Overflow" aria-label="Hacker News">
       <i class="fab fa-hacker-news " aria-hidden="true"></i>
     </a>
   </li>
@@ -279,13 +279,13 @@ EIP/RIP is the guy who instruct the execution flow to it&rsquo;s next destinatio
     <div id="nav-footer" style="display: none">
       <ul>
          
-          <li><a href="sombra.sh/">Home</a></li>
+          <li><a href="/">Home</a></li>
          
-          <li><a href="sombra.sh/posts">Writings</a></li>
+          <li><a href="/posts">Writings</a></li>
          
-          <li><a href="sombra.sh/tags">Tags</a></li>
+          <li><a href="/tags">Tags</a></li>
          
-          <li><a href="sombra.sh/about">About</a></li>
+          <li><a href="/about">About</a></li>
         
       </ul>
     </div>
@@ -322,47 +322,47 @@ EIP/RIP is the guy who instruct the execution flow to it&rsquo;s next destinatio
   
   
   <li>
-    <a class="icon" href="http://www.facebook.com/sharer.php?u=sombra.sh%2fposts%2fbrain-overflow%2f" aria-label="Facebook">
+    <a class="icon" href="http://www.facebook.com/sharer.php?u=%2fposts%2fbrain-overflow%2f" aria-label="Facebook">
       <i class="fab fa-facebook fa-lg" aria-hidden="true"></i>
     </a>
   </li>
   <li>
-    <a class="icon" href="https://twitter.com/share?url=sombra.sh%2fposts%2fbrain-overflow%2f&text=Brain%20Overflow" aria-label="Twitter">
+    <a class="icon" href="https://twitter.com/share?url=%2fposts%2fbrain-overflow%2f&text=Brain%20Overflow" aria-label="Twitter">
       <i class="fab fa-twitter fa-lg" aria-hidden="true"></i>
     </a>
   </li>
   <li>
-    <a class="icon" href="http://www.linkedin.com/shareArticle?url=sombra.sh%2fposts%2fbrain-overflow%2f&title=Brain%20Overflow" aria-label="Linkedin">
+    <a class="icon" href="http://www.linkedin.com/shareArticle?url=%2fposts%2fbrain-overflow%2f&title=Brain%20Overflow" aria-label="Linkedin">
       <i class="fab fa-linkedin fa-lg" aria-hidden="true"></i>
     </a>
   </li>
   <li>
-    <a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=sombra.sh%2fposts%2fbrain-overflow%2f&is_video=false&description=Brain%20Overflow" aria-label="Pinterest">
+    <a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=%2fposts%2fbrain-overflow%2f&is_video=false&description=Brain%20Overflow" aria-label="Pinterest">
       <i class="fab fa-pinterest fa-lg" aria-hidden="true"></i>
     </a>
   </li>
   <li>
-    <a class="icon" href="mailto:?subject=Brain%20Overflow&body=Check out this article: sombra.sh%2fposts%2fbrain-overflow%2f" aria-label="Email">
+    <a class="icon" href="mailto:?subject=Brain%20Overflow&body=Check out this article: %2fposts%2fbrain-overflow%2f" aria-label="Email">
       <i class="fas fa-envelope fa-lg" aria-hidden="true"></i>
     </a>
   </li>
   <li>
-    <a class="icon" href="https://getpocket.com/save?url=sombra.sh%2fposts%2fbrain-overflow%2f&title=Brain%20Overflow" aria-label="Pocket">
+    <a class="icon" href="https://getpocket.com/save?url=%2fposts%2fbrain-overflow%2f&title=Brain%20Overflow" aria-label="Pocket">
       <i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i>
     </a>
   </li>
   <li>
-    <a class="icon" href="http://reddit.com/submit?url=sombra.sh%2fposts%2fbrain-overflow%2f&title=Brain%20Overflow" aria-label="reddit">
+    <a class="icon" href="http://reddit.com/submit?url=%2fposts%2fbrain-overflow%2f&title=Brain%20Overflow" aria-label="reddit">
       <i class="fab fa-reddit fa-lg" aria-hidden="true"></i>
     </a>
   </li>
   <li>
-    <a class="icon" href="http://www.tumblr.com/share/link?url=sombra.sh%2fposts%2fbrain-overflow%2f&name=Brain%20Overflow&description=Brain%20%28Buffer%29%20Overflow%20What%20happens%20if%20you%20try%20to%20access%20some%20%26ldquo%3bextra%26rdquo%3b%20part%20of%20computer%20memory%3f%20What%20is%20memory%3f%20What%20could%20go%20wrong%20if%20our%20program%20doesn%26rsquo%3bt%20check%20for%20boundaries%3f%20Well%2c%20that%26rsquo%3bs%20what%20we%26rsquo%3bll%20be%20seing%20in%20this%20post.%0aBuffers%20According%20with%20our%20good%20old%20friend%20Wikipedia%2c%20buffers%20can%20be%20described%20as%20a%20region%20of%20a%20memory%20used%20to%20temporarily%20store%20data%20while%20it%20is%20being%20moved%20from%20one%20place%20to%20another." aria-label="Tumblr">
+    <a class="icon" href="http://www.tumblr.com/share/link?url=%2fposts%2fbrain-overflow%2f&name=Brain%20Overflow&description=Brain%20%28Buffer%29%20Overflow%20What%20happens%20if%20you%20try%20to%20access%20some%20%26ldquo%3bextra%26rdquo%3b%20part%20of%20computer%20memory%3f%20What%20is%20memory%3f%20What%20could%20go%20wrong%20if%20our%20program%20doesn%26rsquo%3bt%20check%20for%20boundaries%3f%20Well%2c%20that%26rsquo%3bs%20what%20we%26rsquo%3bll%20be%20seing%20in%20this%20post.%0aBuffers%20According%20with%20our%20good%20old%20friend%20Wikipedia%2c%20buffers%20can%20be%20described%20as%20a%20region%20of%20a%20memory%20used%20to%20temporarily%20store%20data%20while%20it%20is%20being%20moved%20from%20one%20place%20to%20another." aria-label="Tumblr">
       <i class="fab fa-tumblr fa-lg" aria-hidden="true"></i>
     </a>
   </li>
   <li>
-    <a class="icon" href="https://news.ycombinator.com/submitlink?u=sombra.sh%2fposts%2fbrain-overflow%2f&t=Brain%20Overflow" aria-label="Hacker News">
+    <a class="icon" href="https://news.ycombinator.com/submitlink?u=%2fposts%2fbrain-overflow%2f&t=Brain%20Overflow" aria-label="Hacker News">
       <i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i>
     </a>
   </li>
@@ -396,13 +396,13 @@ EIP/RIP is the guy who instruct the execution flow to it&rsquo;s next destinatio
     <nav>
       <ul>
          
-        <li><a href="sombra.sh/">Home</a></li>
+        <li><a href="/">Home</a></li>
          
-        <li><a href="sombra.sh/posts">Writings</a></li>
+        <li><a href="/posts">Writings</a></li>
          
-        <li><a href="sombra.sh/tags">Tags</a></li>
+        <li><a href="/tags">Tags</a></li>
          
-        <li><a href="sombra.sh/about">About</a></li>
+        <li><a href="/about">About</a></li>
         
       </ul>
     </nav>
@@ -413,11 +413,11 @@ EIP/RIP is the guy who instruct the execution flow to it&rsquo;s next destinatio
   </div>
 </body>
 
-<link rel="stylesheet" href=/sombra.sh/lib/font-awesome/css/all.min.css>
-<script src=/sombra.sh/lib/jquery/jquery.min.js></script>
-<script src=/sombra.sh/js/main.js></script>
+<link rel="stylesheet" href=/lib/font-awesome/css/all.min.css>
+<script src=/lib/jquery/jquery.min.js></script>
+<script src=/js/main.js></script>
 
-<script src=/sombra.sh/js/code-copy.js></script>
+<script src=/js/code-copy.js></script>
 
 
 
