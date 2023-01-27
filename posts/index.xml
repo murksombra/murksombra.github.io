@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Posts on Sombra&#39;s Blog</title>
+    <link>/posts/</link>
+    <description>Recent content in Posts on Sombra&#39;s Blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <copyright>sombra.sh</copyright>
+    <lastBuildDate>Thu, 19 Jan 2023 20:24:05 -0800</lastBuildDate><atom:link href="/posts/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Brain Overflow</title>
+      <link>/posts/brain-overflow/</link>
+      <pubDate>Thu, 19 Jan 2023 20:24:05 -0800</pubDate>
+      
+      <guid>/posts/brain-overflow/</guid>
+      <description>Brain (Buffer) Overflow What happens if you try to access some &amp;ldquo;extra&amp;rdquo; part of computer memory? What is memory? What could go wrong if our program doesn&amp;rsquo;t check for boundaries? Well, that&amp;rsquo;s what we&amp;rsquo;ll be seing in this post.
+Buffers According with our good old friend Wikipedia, buffers can be described as a region of a memory used to temporarily store data while it is being moved from one place to another.</description>
+    </item>
+    
+  </channel>
+</rss>
