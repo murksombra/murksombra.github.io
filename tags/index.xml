@@ -6,6 +6,16 @@
     <description>Recent content in Tags on Sombra&#39;s Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <copyright>sombra.sh</copyright><atom:link href="/tags/index.xml" rel="self" type="application/rss+xml" />
+    <copyright>sombra.sh</copyright>
+    <lastBuildDate>Wed, 28 Dec 2022 00:00:00 +0000</lastBuildDate><atom:link href="/tags/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>personal</title>
+      <link>/tags/personal/</link>
+      <pubDate>Wed, 28 Dec 2022 00:00:00 +0000</pubDate>
+      
+      <guid>/tags/personal/</guid>
+      <description></description>
+    </item>
+    
   </channel>
 </rss>
