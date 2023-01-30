@@ -7,7 +7,16 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>sombra.sh</copyright>
-    <lastBuildDate>Thu, 19 Jan 2023 20:24:05 -0800</lastBuildDate><atom:link href="/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Fri, 27 Jan 2023 18:26:44 -0800</lastBuildDate><atom:link href="/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Is your Rust code leaking secret info?</title>
+      <link>/posts/rust-leaking-secrets/</link>
+      <pubDate>Fri, 27 Jan 2023 18:26:44 -0800</pubDate>
+      
+      <guid>/posts/rust-leaking-secrets/</guid>
+      <description>First things first We close the lide of our noteboo and go out to grab a coffee or a beer. The OS detects and start to suspend the tasks saving it to the RAM or even the Disk/SSD. After couple minutes we get back and start to use our computer like there&amp;rsquo;s no tomorrow. While our fingers type as fast as the matrix allows, a bunch of sensetive operations start to happen (decryption, key generation, etc) and we just keep going, taking for granted what our beloved brothers &amp;ndash; system programmers &amp;ndash; did.</description>
+    </item>
+    
     <item>
       <title>Brain Overflow</title>
       <link>/posts/brain-overflow/</link>

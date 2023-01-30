@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+  <link rel="preload" href="/lib/font-awesome/webfonts/fa-brands-400.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+  <link rel="preload" href="/lib/font-awesome/webfonts/fa-regular-400.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+  <link rel="preload" href="/lib/font-awesome/webfonts/fa-solid-900.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+  <link rel="preload" href="/lib/JetBrainsMono/web/woff2/JetBrainsMono-Regular.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+  <script type="text/javascript" src="https://latest.cactus.chat/cactus.js"></script>
+  <link rel="stylesheet" href="https://latest.cactus.chat/style.css" type="text/css">
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title> Is your Rust code leaking secret info? | Sombra&#39;s Blog</title>
+  <link rel = 'canonical' href = '/posts/rust-leaking-secrets/'>
+  <meta name="description" content="Most of my career has been dedicate to build critical system using: Rust, C and Python. Besides that, I had the opportunity to work in a defense/military contractor which exposed me to offensive security procedures and techniques such as: fuzzing, reverse engineering and low level programming (ASM x86 Intel). Here you&#39;ll find some notes, thoughts and tribal knowledge gathered during my adventures.">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="all,follow">
+  <meta name="googlebot" content="index,follow,snippet,archive">
+  <meta property="og:title" content="Is your Rust code leaking secret info?" />
+<meta property="og:description" content="First things first We close the lide of our noteboo and go out to grab a coffee or a beer. The OS detects and start to suspend the tasks saving it to the RAM or even the Disk/SSD. After couple minutes we get back and start to use our computer like there&rsquo;s no tomorrow. While our fingers type as fast as the matrix allows, a bunch of sensetive operations start to happen (decryption, key generation, etc) and we just keep going, taking for granted what our beloved brothers &ndash; system programmers &ndash; did." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="/posts/rust-leaking-secrets/" />
+<meta property="article:published_time" content="2023-01-27T18:26:44-08:00" />
+<meta property="article:modified_time" content="2023-01-27T18:26:44-08:00" />
+
+  <meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Is your Rust code leaking secret info?"/>
+<meta name="twitter:description" content="First things first We close the lide of our noteboo and go out to grab a coffee or a beer. The OS detects and start to suspend the tasks saving it to the RAM or even the Disk/SSD. After couple minutes we get back and start to use our computer like there&rsquo;s no tomorrow. While our fingers type as fast as the matrix allows, a bunch of sensetive operations start to happen (decryption, key generation, etc) and we just keep going, taking for granted what our beloved brothers &ndash; system programmers &ndash; did."/>
+
+  
+  
+    
+  
+  
+  <link rel="stylesheet" href="/css/styles.94f653e9e151e28067a7c5dbbc4600cbd5a3c721e79faaf971e523c40f3b249b8e4f20bb57810dfffa8d559ca5c140fd56eb4cd9c0853113ad08e66afdb08bdd.css" integrity="sha512-lPZT6eFR4oBnp8XbvEYAy9WjxyHnn6r5ceUjxA87JJuOTyC7V4EN//qNVZylwUD9VutM2cCFMROtCOZq/bCL3Q=="> 
+
+  
+  
+  
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  
+
+  
+<link rel="icon" type="image/png" href="images/favicon.ico" />
+
+  
+  
+  
+  
+</head>
+
+<body class="max-width mx-auto px3 ltr">
+  <div class="content index py4">
+
+  <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;" aria-label="Top of Page"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+        <li><a href="/">Home</a></li>
+         
+        <li><a href="/posts">Writings</a></li>
+         
+        <li><a href="/tags">Tags</a></li>
+         
+        <li><a href="/about">About</a></li>
+        
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li>
+          <a class="icon" href=" /posts/brain-overflow/" aria-label="Previous">
+            <i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i>
+          </a>
+        </li>
+        
+        
+        <li>
+          <a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" aria-label="Top of Page">
+            <i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i>
+          </a>
+        </li>
+        <li>
+          <a class="icon" href="#" aria-label="Share">
+            <i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i>
+          </a>
+        </li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      
+      <ul>
+  
+  
+    
+  
+  
+  <li>
+    <a class="icon" href="http://www.facebook.com/sharer.php?u=%2fposts%2frust-leaking-secrets%2f" aria-label="Facebook">
+      <i class="fab fa-facebook " aria-hidden="true"></i>
+    </a>
+  </li>
+  <li>
+    <a class="icon" href="https://twitter.com/share?url=%2fposts%2frust-leaking-secrets%2f&text=Is%20your%20Rust%20code%20leaking%20secret%20info%3f" aria-label="Twitter">
+      <i class="fab fa-twitter " aria-hidden="true"></i>
+    </a>
+  </li>
+  <li>
+    <a class="icon" href="http://www.linkedin.com/shareArticle?url=%2fposts%2frust-leaking-secrets%2f&title=Is%20your%20Rust%20code%20leaking%20secret%20info%3f" aria-label="Linkedin">
+      <i class="fab fa-linkedin " aria-hidden="true"></i>
+    </a>
+  </li>
+  <li>
+    <a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=%2fposts%2frust-leaking-secrets%2f&is_video=false&description=Is%20your%20Rust%20code%20leaking%20secret%20info%3f" aria-label="Pinterest">
+      <i class="fab fa-pinterest " aria-hidden="true"></i>
+    </a>
+  </li>
+  <li>
+    <a class="icon" href="mailto:?subject=Is%20your%20Rust%20code%20leaking%20secret%20info%3f&body=Check out this article: %2fposts%2frust-leaking-secrets%2f" aria-label="Email">
+      <i class="fas fa-envelope " aria-hidden="true"></i>
+    </a>
+  </li>
+  <li>
+    <a class="icon" href="https://getpocket.com/save?url=%2fposts%2frust-leaking-secrets%2f&title=Is%20your%20Rust%20code%20leaking%20secret%20info%3f" aria-label="Pocket">
+      <i class="fab fa-get-pocket " aria-hidden="true"></i>
+    </a>
+  </li>
+  <li>
+    <a class="icon" href="http://reddit.com/submit?url=%2fposts%2frust-leaking-secrets%2f&title=Is%20your%20Rust%20code%20leaking%20secret%20info%3f" aria-label="reddit">
+      <i class="fab fa-reddit " aria-hidden="true"></i>
+    </a>
+  </li>
+  <li>
+    <a class="icon" href="http://www.tumblr.com/share/link?url=%2fposts%2frust-leaking-secrets%2f&name=Is%20your%20Rust%20code%20leaking%20secret%20info%3f&description=First%20things%20first%20We%20close%20the%20lide%20of%20our%20noteboo%20and%20go%20out%20to%20grab%20a%20coffee%20or%20a%20beer.%20The%20OS%20detects%20and%20start%20to%20suspend%20the%20tasks%20saving%20it%20to%20the%20RAM%20or%20even%20the%20Disk%2fSSD.%20After%20couple%20minutes%20we%20get%20back%20and%20start%20to%20use%20our%20computer%20like%20there%26rsquo%3bs%20no%20tomorrow.%20While%20our%20fingers%20type%20as%20fast%20as%20the%20matrix%20allows%2c%20a%20bunch%20of%20sensetive%20operations%20start%20to%20happen%20%28decryption%2c%20key%20generation%2c%20etc%29%20and%20we%20just%20keep%20going%2c%20taking%20for%20granted%20what%20our%20beloved%20brothers%20%26ndash%3b%20system%20programmers%20%26ndash%3b%20did." aria-label="Tumblr">
+      <i class="fab fa-tumblr " aria-hidden="true"></i>
+    </a>
+  </li>
+  <li>
+    <a class="icon" href="https://news.ycombinator.com/submitlink?u=%2fposts%2frust-leaking-secrets%2f&t=Is%20your%20Rust%20code%20leaking%20secret%20info%3f" aria-label="Hacker News">
+      <i class="fab fa-hacker-news " aria-hidden="true"></i>
+    </a>
+  </li>
+</ul>
+
+    </div>
+    
+    <div id="toc">
+      <nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li>
+          <ul>
+            <li><a href="#first-things-first">First things first</a></li>
+            <li><a href="#a-secret-history">A Secret history</a></li>
+            <li><a href="#and-now-what">And now what?</a></li>
+            <li><a href="#rust-and-secrets">Rust and Secrets</a></li>
+            <li><a href="#aboout-the-drop-trait">Aboout the drop trait</a></li>
+            <li><a href="#more-reliable-version">More reliable version</a></li>
+            <li><a href="#wait-what">Wait, what?!</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+    </div>
+    
+  </span>
+</div>
+
+
+  <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+    <header>
+      <h1 class="posttitle" itemprop="name headline">
+        Is your Rust code leaking secret info?
+      </h1>
+      <div class="meta">
+        
+        <div class="postdate">
+          
+          <time datetime="2023-01-27 18:26:44 -0800 PST" itemprop="datePublished">2023-01-27</time>
+          
+        </div>
+        
+        
+        <div class="article-read-time">
+          <i class="far fa-clock"></i>
+          
+          3 minute read
+        </div>
+        
+        
+        
+      </div>
+    </header>
+
+  
+    
+    <div class="content" itemprop="articleBody">
+      <h4 id="first-things-first">First things first</h4>
+<p>We close the lide of our noteboo and go out to grab a coffee or a beer. The OS detects and start to suspend the tasks saving it to the RAM or even the Disk/SSD. After couple minutes we get back and start to use our computer like there&rsquo;s no tomorrow. While our fingers type as fast as the matrix allows, a bunch of sensetive operations start to happen (decryption, key generation, etc) and we just keep going, taking for granted what our beloved brothers &ndash; system programmers &ndash; did.</p>
+<p>When dealing with kernel &amp; low level operations, operating systems and compilers do their best so we can flow trhough all the tasks and achieve our goal. HOWEVER, there&rsquo;s some important details that we need to take care especially when we&rsquo;re dealing with secrets. Yes my friend, that little and almost funny word that we used to describe things that are so important that we don&rsquo;t wanna anybody to know.</p>
+<h4 id="a-secret-history">A Secret history</h4>
+<p>By the fifteenth century, European cryptography was an emergent industry. The revival in the arts, science and education during the Renaissance paved the technical way for cryptography development, while political conspiracies and endeavours offered a motivation for secret communication.</p>
+<p>On the other hand, while politicians and diplomats were trained and skilled in establish secure communications the cryptanalysts were there to break it. In theory (meaning that the literature is not peacefull on this) the first cryptanalyst was Giovanni Soro, famous for his hability to break the unbreakable and to help the Vatican when god seemed to look the other way.</p>
+<h4 id="and-now-what">And now what?</h4>
+<p>Since forever we have the secret game, where cryptographers (people who create the code) tries to create ways for us to exchange our secrets in a safe manner; cryptanalysts are trying their best to intercept and break the code; and finally us, the mortal ones that cannot hold our secret to ourselves :)</p>
+<p>When programming pieces of code that deals with some kind of private/sensitive information we have to be extra cautios because we can revel or better saying, leave the unencrypted infor resting in memory. And you don&rsquo;t want this.</p>
+<h4 id="rust-and-secrets">Rust and Secrets</h4>
+<p>I&rsquo;ll use Rust mostly because is the language that I enjoy the most but this concept can be applied in other programming languages as well. Let&rsquo;s see an example:</p>
+<div class="highlight"><pre style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust"><span style="color:#080">#[derive(Debug)]</span><span style="color:#bbb">
+</span><span style="color:#bbb"></span><span style="color:#a2f;font-weight:bold">struct</span> <span style="color:#00f">Secret</span>([<span style="color:#0b0;font-weight:bold">u8</span>;<span style="color:#bbb"> </span><span style="color:#666">6</span>]);<span style="color:#bbb">
+</span><span style="color:#bbb">
+</span><span style="color:#bbb"></span><span style="color:#a2f;font-weight:bold">fn</span> <span style="color:#00a000">get_secret</span>()<span style="color:#bbb"> </span>-&gt; <span style="color:#00f">Secret</span><span style="color:#bbb"> </span>{<span style="color:#bbb">
+</span><span style="color:#bbb">    </span>Secret(<span style="color:#666">*</span><span style="color:#b44">b&#34;Enigma&#34;</span>)<span style="color:#bbb"> </span><span style="color:#080;font-style:italic">//can be any sort of sensitive operation...
+</span><span style="color:#080;font-style:italic"></span>}<span style="color:#bbb">
+</span><span style="color:#bbb">
+</span><span style="color:#bbb"></span><span style="color:#a2f;font-weight:bold">fn</span> <span style="color:#00a000">main</span>()<span style="color:#bbb"> </span>{<span style="color:#bbb">
+</span><span style="color:#bbb">    </span><span style="color:#a2f;font-weight:bold">let</span><span style="color:#bbb"> </span>secret<span style="color:#bbb"> </span><span style="color:#666">=</span><span style="color:#bbb"> </span>get_secret();<span style="color:#bbb">
+</span><span style="color:#bbb">
+</span><span style="color:#bbb">    </span>println<span style="color:#666">!</span>(<span style="color:#b44">&#34;Using secret to do secrecy stuff: {:?}&#34;</span>,<span style="color:#bbb"> </span>secret);<span style="color:#bbb">
+</span><span style="color:#bbb">
+</span><span style="color:#bbb">    </span>drop(secret);<span style="color:#bbb">
+</span><span style="color:#bbb">
+</span><span style="color:#bbb">    </span>println<span style="color:#666">!</span>(<span style="color:#b44">&#34;Foo bar super duper interesting rest of our program logic...&#34;</span>);<span style="color:#bbb">
+</span><span style="color:#bbb"></span>}<span style="color:#bbb">
+</span><span style="color:#bbb">
+</span></code></pre></div><p>And the output will be something like:</p>
+<pre><code>Using secret to do secrecy stuff: Secret([69, 110, 105, 103, 109, 97])
+Foo bar super duper interesting rest of our program logic...
+
+</code></pre><h4 id="aboout-the-drop-trait">Aboout the drop trait</h4>
+<p>The Drop trait in Rust is a special trait that provides a way to specify an action to be taken whenen it&rsquo;s owner goes away. Dropping a value entails freeing whatever other values, heap storage, and system resources the value owns. There are a few circustances that implicit perform a drop, such as: when a variable goes out of scope at the end of an expression statement; when we truncate a vector etc.</p>
+<p>Rust take care of most things but in some specific cases we have to tweak a little bit and implement our own behavior for the Drop trait. Otherwise, we&rsquo;ll leak secret info.</p>
+<h4 id="more-reliable-version">More reliable version</h4>
+<p>So enough said, let&rsquo;s close this blog post with a better example about how should we be managing and cleaning our memory after a secret operation.</p>
+<div class="highlight"><pre style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust"><span style="color:#a2f;font-weight:bold">use</span><span style="color:#bbb"> </span>zeroize::Zeroize;<span style="color:#bbb">
+</span><span style="color:#bbb">
+</span><span style="color:#bbb"></span><span style="color:#080">#[derive(Debug)]</span><span style="color:#bbb">
+</span><span style="color:#bbb"></span><span style="color:#a2f;font-weight:bold">struct</span> <span style="color:#00f">Secret</span>([<span style="color:#0b0;font-weight:bold">u8</span>;<span style="color:#bbb"> </span><span style="color:#666">6</span>]);<span style="color:#bbb">
+</span><span style="color:#bbb">
+</span><span style="color:#bbb"></span><span style="color:#a2f;font-weight:bold">impl</span><span style="color:#bbb"> </span><span style="color:#a2f">Drop</span><span style="color:#bbb"> </span><span style="color:#a2f;font-weight:bold">for</span><span style="color:#bbb"> </span>Secret<span style="color:#bbb"> </span>{<span style="color:#bbb">
+</span><span style="color:#bbb">    </span><span style="color:#a2f;font-weight:bold">fn</span> <span style="color:#00a000">drop</span>(<span style="color:#666">&amp;</span><span style="color:#a2f;font-weight:bold">mut</span><span style="color:#bbb"> </span>self)<span style="color:#bbb"> </span>{<span style="color:#bbb">
+</span><span style="color:#bbb">        </span>self.<span style="color:#666">0.</span>zeroize();<span style="color:#bbb">
+</span><span style="color:#bbb">    </span>}<span style="color:#bbb">
+</span><span style="color:#bbb"></span>}<span style="color:#bbb">
+</span><span style="color:#bbb">
+</span><span style="color:#bbb"></span><span style="color:#a2f;font-weight:bold">fn</span> <span style="color:#00a000">get_secret</span>()<span style="color:#bbb"> </span>-&gt; <span style="color:#00f">Secret</span><span style="color:#bbb"> </span>{<span style="color:#bbb">
+</span><span style="color:#bbb">    </span><span style="color:#a2f;font-weight:bold">let</span><span style="color:#bbb"> </span>secret<span style="color:#bbb"> </span><span style="color:#666">=</span><span style="color:#bbb"> </span>Secret(<span style="color:#666">*</span><span style="color:#b44">b&#34;Enigma&#34;</span>);<span style="color:#bbb">
+</span><span style="color:#bbb">    </span>secret<span style="color:#bbb">
+</span><span style="color:#bbb"></span>}<span style="color:#bbb">
+</span><span style="color:#bbb">
+</span><span style="color:#bbb"></span><span style="color:#a2f;font-weight:bold">fn</span> <span style="color:#00a000">main</span>()<span style="color:#bbb"> </span>{<span style="color:#bbb">
+</span><span style="color:#bbb">    </span><span style="color:#a2f;font-weight:bold">let</span><span style="color:#bbb"> </span>secret<span style="color:#bbb"> </span><span style="color:#666">=</span><span style="color:#bbb"> </span>get_secret();<span style="color:#bbb">
+</span><span style="color:#bbb">    </span><span style="color:#a2f;font-weight:bold">let</span><span style="color:#bbb"> </span>pointer<span style="color:#bbb"> </span><span style="color:#666">=</span><span style="color:#bbb"> </span>secret.<span style="color:#666">0.</span>as_ptr();<span style="color:#bbb">
+</span><span style="color:#bbb">
+</span><span style="color:#bbb">    </span>println<span style="color:#666">!</span>(<span style="color:#b44">&#34;Pointer when using: {:p}&#34;</span>,<span style="color:#bbb"> </span>secret.<span style="color:#666">0.</span>as_ptr());<span style="color:#bbb">
+</span><span style="color:#bbb">    </span>println<span style="color:#666">!</span>(<span style="color:#b44">&#34;Using secret to do stuff: {:?}&#34;</span>,<span style="color:#bbb"> </span>secret);<span style="color:#bbb">
+</span><span style="color:#bbb">
+</span><span style="color:#bbb">    </span>println<span style="color:#666">!</span>(<span style="color:#b44">&#34;Dropping in 3,2...&#34;</span>);<span style="color:#bbb">
+</span><span style="color:#bbb">    </span>drop(secret);<span style="color:#bbb">
+</span><span style="color:#bbb">    </span>println<span style="color:#666">!</span>(<span style="color:#b44">&#34;Drop concluded.&#34;</span>);<span style="color:#bbb">
+</span><span style="color:#bbb">
+</span><span style="color:#bbb">    </span>println<span style="color:#666">!</span>(<span style="color:#b44">&#34;Memory Status: {:?}&#34;</span>,<span style="color:#bbb"> </span><span style="color:#a2f;font-weight:bold">unsafe</span><span style="color:#bbb"> </span>{<span style="color:#bbb">
+</span><span style="color:#bbb">        </span>core::slice::from_raw_parts(pointer,<span style="color:#bbb"> </span><span style="color:#666">6</span>)<span style="color:#bbb">
+</span><span style="color:#bbb">    </span>});<span style="color:#bbb">
+</span><span style="color:#bbb"></span>}<span style="color:#bbb">
+</span></code></pre></div><p>Output will be somehing close to:</p>
+<pre><code>Pointer when using: 0x7ffdb3a07ce8
+Using secret to do stuff: Secret([69, 110, 105, 103, 109, 97])
+Dropping in 3,2...
+Drop concluded.
+Memory Status: [69, 110, 105, 103, 109, 97]
+</code></pre><h4 id="wait-what">Wait, what?!</h4>
+<p>Is there our secret laying around the memory AFTER we coded our supreme drop&rsquo;s implementation? And to be more precise, we&rsquo;re using a crate called Zeroize to help us here so wtf is happening?!</p>
+<p>Rust isn&rsquo;t perfect but it&rsquo;s super flexible and customizable. Short answer is that (almost) every move compiles into  memory copy. In best case scenarios the rustc can optimize but sometimes it not. If the compiler doesn&rsquo;t optimize away the memory copy, we&rsquo;ll find our secret laying somewhere else in memory.</p>
+<p>The long aswer and one possible fix for this is left to the reader. Enjoy.</p>
+
+    </div>
+  </article>
+
+  
+  
+
+
+
+
+
+
+  <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/posts">Writings</a></li>
+         
+          <li><a href="/tags">Tags</a></li>
+         
+          <li><a href="/about">About</a></li>
+        
+      </ul>
+    </div>
+
+    
+    <div id="toc-footer" style="display: none">
+      <nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li>
+          <ul>
+            <li><a href="#first-things-first">First things first</a></li>
+            <li><a href="#a-secret-history">A Secret history</a></li>
+            <li><a href="#and-now-what">And now what?</a></li>
+            <li><a href="#rust-and-secrets">Rust and Secrets</a></li>
+            <li><a href="#aboout-the-drop-trait">Aboout the drop trait</a></li>
+            <li><a href="#more-reliable-version">More reliable version</a></li>
+            <li><a href="#wait-what">Wait, what?!</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+    </div>
+    
+
+    <div id="share-footer" style="display: none">
+      
+      <ul>
+  
+  
+    
+  
+  
+  <li>
+    <a class="icon" href="http://www.facebook.com/sharer.php?u=%2fposts%2frust-leaking-secrets%2f" aria-label="Facebook">
+      <i class="fab fa-facebook fa-lg" aria-hidden="true"></i>
+    </a>
+  </li>
+  <li>
+    <a class="icon" href="https://twitter.com/share?url=%2fposts%2frust-leaking-secrets%2f&text=Is%20your%20Rust%20code%20leaking%20secret%20info%3f" aria-label="Twitter">
+      <i class="fab fa-twitter fa-lg" aria-hidden="true"></i>
+    </a>
+  </li>
+  <li>
+    <a class="icon" href="http://www.linkedin.com/shareArticle?url=%2fposts%2frust-leaking-secrets%2f&title=Is%20your%20Rust%20code%20leaking%20secret%20info%3f" aria-label="Linkedin">
+      <i class="fab fa-linkedin fa-lg" aria-hidden="true"></i>
+    </a>
+  </li>
+  <li>
+    <a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=%2fposts%2frust-leaking-secrets%2f&is_video=false&description=Is%20your%20Rust%20code%20leaking%20secret%20info%3f" aria-label="Pinterest">
+      <i class="fab fa-pinterest fa-lg" aria-hidden="true"></i>
+    </a>
+  </li>
+  <li>
+    <a class="icon" href="mailto:?subject=Is%20your%20Rust%20code%20leaking%20secret%20info%3f&body=Check out this article: %2fposts%2frust-leaking-secrets%2f" aria-label="Email">
+      <i class="fas fa-envelope fa-lg" aria-hidden="true"></i>
+    </a>
+  </li>
+  <li>
+    <a class="icon" href="https://getpocket.com/save?url=%2fposts%2frust-leaking-secrets%2f&title=Is%20your%20Rust%20code%20leaking%20secret%20info%3f" aria-label="Pocket">
+      <i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i>
+    </a>
+  </li>
+  <li>
+    <a class="icon" href="http://reddit.com/submit?url=%2fposts%2frust-leaking-secrets%2f&title=Is%20your%20Rust%20code%20leaking%20secret%20info%3f" aria-label="reddit">
+      <i class="fab fa-reddit fa-lg" aria-hidden="true"></i>
+    </a>
+  </li>
+  <li>
+    <a class="icon" href="http://www.tumblr.com/share/link?url=%2fposts%2frust-leaking-secrets%2f&name=Is%20your%20Rust%20code%20leaking%20secret%20info%3f&description=First%20things%20first%20We%20close%20the%20lide%20of%20our%20noteboo%20and%20go%20out%20to%20grab%20a%20coffee%20or%20a%20beer.%20The%20OS%20detects%20and%20start%20to%20suspend%20the%20tasks%20saving%20it%20to%20the%20RAM%20or%20even%20the%20Disk%2fSSD.%20After%20couple%20minutes%20we%20get%20back%20and%20start%20to%20use%20our%20computer%20like%20there%26rsquo%3bs%20no%20tomorrow.%20While%20our%20fingers%20type%20as%20fast%20as%20the%20matrix%20allows%2c%20a%20bunch%20of%20sensetive%20operations%20start%20to%20happen%20%28decryption%2c%20key%20generation%2c%20etc%29%20and%20we%20just%20keep%20going%2c%20taking%20for%20granted%20what%20our%20beloved%20brothers%20%26ndash%3b%20system%20programmers%20%26ndash%3b%20did." aria-label="Tumblr">
+      <i class="fab fa-tumblr fa-lg" aria-hidden="true"></i>
+    </a>
+  </li>
+  <li>
+    <a class="icon" href="https://news.ycombinator.com/submitlink?u=%2fposts%2frust-leaking-secrets%2f&t=Is%20your%20Rust%20code%20leaking%20secret%20info%3f" aria-label="Hacker News">
+      <i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i>
+    </a>
+  </li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+      
+        <a id="menu-toggle" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;" aria-label="Menu">
+          <i class="fas fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        
+        <a id="toc-toggle" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;" aria-label="TOC">
+          <i class="fas fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        
+        <a id="share-toggle" class="icon" href="#" onclick="$('#share-footer').toggle();return false;" aria-label="Share">
+          <i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" aria-label="Top of Page">
+          <i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+
+  <footer id="footer">
+  <div class="footer-left">
+    Copyright  &copy; 2023  sombra.sh 
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+        <li><a href="/">Home</a></li>
+         
+        <li><a href="/posts">Writings</a></li>
+         
+        <li><a href="/tags">Tags</a></li>
+         
+        <li><a href="/about">About</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+
+  </div>
+</body>
+
+<link rel="stylesheet" href=/lib/font-awesome/css/all.min.css>
+<script src=/lib/jquery/jquery.min.js></script>
+<script src=/js/main.js></script>
+
+<script src=/js/code-copy.js></script>
+
+
+
+
+</html>
