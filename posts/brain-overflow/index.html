@@ -226,32 +226,39 @@ Buffers According with our good old friend Wikipedia, buffers can be described a
 <h4 id="exploits">Exploits</h4>
 <p>Since this is the very first blog post, I think that will cause no harm to use a fell lines to describe what an exploit is. Cutting the chase, an exploit is a piece of code that trigger a vulnerability and cause a lot of trouble for the blue teams :)</p>
 <p>Going a bit further, most of the exploits &ndash; at least the old ones &ndash; have some sort of memory corruption step. By doing that, the hacker&rsquo;s goal is almost always take over control of the execution flow of the program and then redirect it to wherever the attacker sees fit. On Intel platforms for example, imagine that you create a beautiful and super secure piece of code as the following:</p>
-<pre><code># include &lt;stdio.h&gt;
-# include &lt;string.h&gt;
+<div class="highlight"><pre style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c" data-lang="c"><span style="color:#080"># include &lt;stdio.h&gt;
+</span><span style="color:#080"># include &lt;string.h&gt;
+</span><span style="color:#080"></span>
+<span style="color:#0b0;font-weight:bold">void</span> <span style="color:#0b0;font-weight:bold">int</span> <span style="color:#00a000">main</span>(<span style="color:#0b0;font-weight:bold">int</span> argc, <span style="color:#0b0;font-weight:bold">char</span> <span style="color:#666">*</span>argv[]){
+	<span style="color:#0b0;font-weight:bold">int</span> value <span style="color:#666">=</span> <span style="color:#666">666</span>;
+	<span style="color:#0b0;font-weight:bold">char</span> buffer_a[<span style="color:#666">13</span>], buffer_b[<span style="color:#666">13</span>];
 
-void int main(int argc, char *argv[]){
-	int value = 666;
-	char buffer_a[13], buffer_b[13];
+	<span style="color:#080;font-style:italic">//copying some values to the buffer
+</span><span style="color:#080;font-style:italic"></span>	strcpy(buffer_a,<span style="color:#b44">&#34;hacks&#34;</span>);
+	strcpy(buffer_b,<span style="color:#b44">&#34;msdos&#34;</span>);
 
-	//copying some values to the buffer
-	strcpy(buffer_a,&quot;hacks&quot;);
-	strcpy(buffer_b,&quot;msdos&quot;);
+	printf(<span style="color:#b44">&#34;[BEFORE MADNESS] buffer_a is at %p and contains </span><span style="color:#b62;font-weight:bold">\&#39;</span><span style="color:#b44">%s&#39;</span><span style="color:#b62;font-weight:bold">\n</span><span style="color:#b44">&#34;</span>, buffer_a, buffer_a);
+	printf(<span style="color:#b44">&#34;[BEFORE MADNESS] buffer_b is at %p and contains </span><span style="color:#b62;font-weight:bold">\&#39;</span><span style="color:#b44">%s&#39;</span><span style="color:#b62;font-weight:bold">\n</span><span style="color:#b44">&#34;</span>, buffer_b, buffer_b);
 
-	printf(&quot;[BEFORE MADNESS] buffer_a is at %p and contains \'%s'\n&quot;, buffer_a, buffer_a);
-	printf(&quot;[BEFORE MADNESS] buffer_b is at %p and contains \'%s'\n&quot;, buffer_b, buffer_b);
-
-	//Gateway to hell happening next lol
-	printf(&quot;[!] Copying argv bytes into buffer_b, hold.&quot;);
-	strcpy(buffer_b, argv[1]);
+	<span style="color:#080;font-style:italic">//Gateway to hell happening next lol
+</span><span style="color:#080;font-style:italic"></span>	printf(<span style="color:#b44">&#34;[!] Copying argv bytes into buffer_b, hold.&#34;</span>);
+	strcpy(buffer_b, argv[<span style="color:#666">1</span>]);
 	
-	printf(&quot;[MADNESS] buffer_a is at %p and contains \'%s'\n&quot;, buffer_a, buffer_a);
-	printf(&quot;[MADNESS] buffer_b is at %p and contains \'%s'\n&quot;, buffer_b, buffer_b);
-	printf(&quot;[MADNESS] value is at %p and is was set to %d(0x%08x)\n&quot;, &amp;value, value, value);
+	printf(<span style="color:#b44">&#34;[MADNESS] buffer_a is at %p and contains </span><span style="color:#b62;font-weight:bold">\&#39;</span><span style="color:#b44">%s&#39;</span><span style="color:#b62;font-weight:bold">\n</span><span style="color:#b44">&#34;</span>, buffer_a, buffer_a);
+	printf(<span style="color:#b44">&#34;[MADNESS] buffer_b is at %p and contains </span><span style="color:#b62;font-weight:bold">\&#39;</span><span style="color:#b44">%s&#39;</span><span style="color:#b62;font-weight:bold">\n</span><span style="color:#b44">&#34;</span>, buffer_b, buffer_b);
+	printf(<span style="color:#b44">&#34;[MADNESS] value is at %p and is was set to %d(0x%08x)</span><span style="color:#b62;font-weight:bold">\n</span><span style="color:#b44">&#34;</span>, <span style="color:#666">&amp;</span>value, value, value);
 
 
 }
-</code></pre><p>After compiling it with gcc, we got the following result:</p>
-<p>Ahá! We were able to input weird and unexpected values into buffers and variables. Cool for us, terrible for them.</p>
+</code></pre></div><p>After compiling it with gcc, we got the following result:</p>
+<pre><code>[BEFORE MADNESS] buffer_a is at 0x7ffc6ad93b8f and contains 'hacks'
+[BEFORE MADNESS] buffer_b is at 0x7ffc6ad93b82 and contains 'msdos'
+[!] Copying argv bytes into buffer_b, hold.
+[MADNESS] buffer_a is at 0x7ffc6ad93b8f and contains 'AAAAAAAAAAAAAAAAAAAAA'
+[MADNESS] buffer_b is at 0x7ffc6ad93b82 and contains 'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA'
+[MADNESS] value is at 0x7ffc6ad93b9c and is was set to 1094795585(0x41414141)
+
+</code></pre><p>Ahá! We were able to input weird and unexpected values into buffers and variables. Cool for us, terrible for them.</p>
 <h4 id="whats-going-on">What&rsquo;s going on?</h4>
 <p>If you pay attention in to the details, you&rsquo;ll see that the buffers were create one next to each other and the extra bytes ended on the next buffer. In this scenario, if we provide a large enough input we&rsquo;ll also be able to overwrite the variable as well.</p>
 <h4 id="developers-mistake">Developers mistake</h4>
