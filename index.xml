@@ -7,7 +7,17 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>sombra.sh</copyright>
-    <lastBuildDate>Fri, 27 Jan 2023 18:26:44 -0800</lastBuildDate><atom:link href="/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Thu, 02 Feb 2023 07:26:27 -0800</lastBuildDate><atom:link href="/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Playing With Fire: Finding Validators</title>
+      <link>/posts/playing-with-fire-geth-client/</link>
+      <pubDate>Thu, 02 Feb 2023 07:26:27 -0800</pubDate>
+      
+      <guid>/posts/playing-with-fire-geth-client/</guid>
+      <description>Here am I once again.. This time, my night thoughts lead me to a very simple rust program that allow you to find (not 100% precise) ethereum validators. Please keep in mind this is a 30&#39; research in the middle of the night. It&amp;rsquo;s just an experience for demonstration and education ONLY.
+Cents about decentralization and client diversity Back in the day, BTC guys were almost the same as hackativists. By that I mean, they were truly focused on the mission and the WHY behind the idea of cryptocurrency and electronic cash.</description>
+    </item>
+    
     <item>
       <title>Is your Rust code leaking secret info?</title>
       <link>/posts/rust-leaking-secrets/</link>
