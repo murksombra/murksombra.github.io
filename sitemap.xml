@@ -1,43 +1,27 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
-  
   <url>
     <loc>/posts/playing-with-fire-geth-client/</loc>
     <lastmod>2023-02-02T07:26:27-08:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>/posts/</loc>
     <lastmod>2023-02-02T07:26:27-08:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>/</loc>
     <lastmod>2023-02-02T07:26:27-08:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>/posts/rust-leaking-secrets/</loc>
     <lastmod>2023-01-27T18:26:44-08:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>/posts/brain-overflow/</loc>
     <lastmod>2023-01-19T20:24:05-08:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>/about/</loc>
     <lastmod>2022-12-28T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>/categories/</loc>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>/tags/</loc>
   </url>
-  
 </urlset>

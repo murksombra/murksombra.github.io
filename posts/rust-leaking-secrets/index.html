@@ -18,7 +18,7 @@
   <meta property="og:title" content="Is your Rust code leaking secret info?" />
 <meta property="og:description" content="First things first We close the lide of our noteboo and go out to grab a coffee or a beer. The OS detects and start to suspend the tasks saving it to the RAM or even the Disk/SSD. After couple minutes we get back and start to use our computer like there&rsquo;s no tomorrow. While our fingers type as fast as the matrix allows, a bunch of sensetive operations start to happen (decryption, key generation, etc) and we just keep going, taking for granted what our beloved brothers &ndash; system programmers &ndash; did." />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="/posts/rust-leaking-secrets/" />
+<meta property="og:url" content="/posts/rust-leaking-secrets/" /><meta property="article:section" content="posts" />
 <meta property="article:published_time" content="2023-01-27T18:26:44-08:00" />
 <meta property="article:modified_time" content="2023-01-27T18:26:44-08:00" />
 
@@ -206,7 +206,7 @@
         <div class="article-read-time">
           <i class="far fa-clock"></i>
           
-          3 minute read
+          4 minute read
         </div>
         
         
@@ -228,65 +228,63 @@
 <p>When programming pieces of code that deals with some kind of private/sensitive information we have to be extra cautios because we can revel or better saying, leave the unencrypted infor resting in memory. And you don&rsquo;t want this.</p>
 <h4 id="rust-and-secrets">Rust and Secrets</h4>
 <p>I&rsquo;ll use Rust mostly because is the language that I enjoy the most but this concept can be applied in other programming languages as well. Let&rsquo;s see an example:</p>
-<div class="highlight"><pre style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust"><span style="color:#080">#[derive(Debug)]</span><span style="color:#bbb">
-</span><span style="color:#bbb"></span><span style="color:#a2f;font-weight:bold">struct</span> <span style="color:#00f">Secret</span>([<span style="color:#0b0;font-weight:bold">u8</span>;<span style="color:#bbb"> </span><span style="color:#666">6</span>]);<span style="color:#bbb">
-</span><span style="color:#bbb">
-</span><span style="color:#bbb"></span><span style="color:#a2f;font-weight:bold">fn</span> <span style="color:#00a000">get_secret</span>()<span style="color:#bbb"> </span>-&gt; <span style="color:#00f">Secret</span><span style="color:#bbb"> </span>{<span style="color:#bbb">
-</span><span style="color:#bbb">    </span>Secret(<span style="color:#666">*</span><span style="color:#b44">b&#34;Enigma&#34;</span>)<span style="color:#bbb"> </span><span style="color:#080;font-style:italic">//can be any sort of sensitive operation...
-</span><span style="color:#080;font-style:italic"></span>}<span style="color:#bbb">
-</span><span style="color:#bbb">
-</span><span style="color:#bbb"></span><span style="color:#a2f;font-weight:bold">fn</span> <span style="color:#00a000">main</span>()<span style="color:#bbb"> </span>{<span style="color:#bbb">
-</span><span style="color:#bbb">    </span><span style="color:#a2f;font-weight:bold">let</span><span style="color:#bbb"> </span>secret<span style="color:#bbb"> </span><span style="color:#666">=</span><span style="color:#bbb"> </span>get_secret();<span style="color:#bbb">
-</span><span style="color:#bbb">
-</span><span style="color:#bbb">    </span>println<span style="color:#666">!</span>(<span style="color:#b44">&#34;Using secret to do secrecy stuff: {:?}&#34;</span>,<span style="color:#bbb"> </span>secret);<span style="color:#bbb">
-</span><span style="color:#bbb">
-</span><span style="color:#bbb">    </span>drop(secret);<span style="color:#bbb">
-</span><span style="color:#bbb">
-</span><span style="color:#bbb">    </span>println<span style="color:#666">!</span>(<span style="color:#b44">&#34;Foo bar super duper interesting rest of our program logic...&#34;</span>);<span style="color:#bbb">
-</span><span style="color:#bbb"></span>}<span style="color:#bbb">
-</span><span style="color:#bbb">
-</span></code></pre></div><p>And the output will be something like:</p>
-<pre><code>Using secret to do secrecy stuff: Secret([69, 110, 105, 103, 109, 97])
+<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-rust" data-lang="rust"><span style="display:flex;"><span><span style="color:#080">#[derive(Debug)]</span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span><span style="color:#a2f;font-weight:bold">struct</span> <span style="color:#00f">Secret</span>([<span style="color:#0b0;font-weight:bold">u8</span>;<span style="color:#bbb"> </span><span style="color:#666">6</span>]);<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span><span style="color:#a2f;font-weight:bold">fn</span> <span style="color:#00a000">get_secret</span>()<span style="color:#bbb"> </span>-&gt; <span style="color:#00f">Secret</span><span style="color:#bbb"> </span>{<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span>Secret(<span style="color:#666">*</span><span style="color:#b44">b&#34;Enigma&#34;</span>)<span style="color:#bbb"> </span><span style="color:#080;font-style:italic">//can be any sort of sensitive operation...
+</span></span></span><span style="display:flex;"><span><span style="color:#080;font-style:italic"></span>}<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span><span style="color:#a2f;font-weight:bold">fn</span> <span style="color:#00a000">main</span>()<span style="color:#bbb"> </span>{<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#a2f;font-weight:bold">let</span><span style="color:#bbb"> </span>secret<span style="color:#bbb"> </span><span style="color:#666">=</span><span style="color:#bbb"> </span>get_secret();<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span>println!(<span style="color:#b44">&#34;Using secret to do secrecy stuff: {:?}&#34;</span>,<span style="color:#bbb"> </span>secret);<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#a2f">drop</span>(secret);<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span>println!(<span style="color:#b44">&#34;Foo bar super duper interesting rest of our program logic...&#34;</span>);<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span>}<span style="color:#bbb">
+</span></span></span></code></pre></div><p>And the output will be something like:</p>
+<pre tabindex="0"><code>Using secret to do secrecy stuff: Secret([69, 110, 105, 103, 109, 97])
 Foo bar super duper interesting rest of our program logic...
-
 </code></pre><h4 id="aboout-the-drop-trait">Aboout the drop trait</h4>
 <p>The Drop trait in Rust is a special trait that provides a way to specify an action to be taken whenen it&rsquo;s owner goes away. Dropping a value entails freeing whatever other values, heap storage, and system resources the value owns. There are a few circustances that implicit perform a drop, such as: when a variable goes out of scope at the end of an expression statement; when we truncate a vector etc.</p>
 <p>Rust take care of most things but in some specific cases we have to tweak a little bit and implement our own behavior for the Drop trait. Otherwise, we&rsquo;ll leak secret info.</p>
 <h4 id="more-reliable-version">More reliable version</h4>
 <p>So enough said, let&rsquo;s close this blog post with a better example about how should we be managing and cleaning our memory after a secret operation.</p>
-<div class="highlight"><pre style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust"><span style="color:#a2f;font-weight:bold">use</span><span style="color:#bbb"> </span>zeroize::Zeroize;<span style="color:#bbb">
-</span><span style="color:#bbb">
-</span><span style="color:#bbb"></span><span style="color:#080">#[derive(Debug)]</span><span style="color:#bbb">
-</span><span style="color:#bbb"></span><span style="color:#a2f;font-weight:bold">struct</span> <span style="color:#00f">Secret</span>([<span style="color:#0b0;font-weight:bold">u8</span>;<span style="color:#bbb"> </span><span style="color:#666">6</span>]);<span style="color:#bbb">
-</span><span style="color:#bbb">
-</span><span style="color:#bbb"></span><span style="color:#a2f;font-weight:bold">impl</span><span style="color:#bbb"> </span><span style="color:#a2f">Drop</span><span style="color:#bbb"> </span><span style="color:#a2f;font-weight:bold">for</span><span style="color:#bbb"> </span>Secret<span style="color:#bbb"> </span>{<span style="color:#bbb">
-</span><span style="color:#bbb">    </span><span style="color:#a2f;font-weight:bold">fn</span> <span style="color:#00a000">drop</span>(<span style="color:#666">&amp;</span><span style="color:#a2f;font-weight:bold">mut</span><span style="color:#bbb"> </span>self)<span style="color:#bbb"> </span>{<span style="color:#bbb">
-</span><span style="color:#bbb">        </span>self.<span style="color:#666">0.</span>zeroize();<span style="color:#bbb">
-</span><span style="color:#bbb">    </span>}<span style="color:#bbb">
-</span><span style="color:#bbb"></span>}<span style="color:#bbb">
-</span><span style="color:#bbb">
-</span><span style="color:#bbb"></span><span style="color:#a2f;font-weight:bold">fn</span> <span style="color:#00a000">get_secret</span>()<span style="color:#bbb"> </span>-&gt; <span style="color:#00f">Secret</span><span style="color:#bbb"> </span>{<span style="color:#bbb">
-</span><span style="color:#bbb">    </span><span style="color:#a2f;font-weight:bold">let</span><span style="color:#bbb"> </span>secret<span style="color:#bbb"> </span><span style="color:#666">=</span><span style="color:#bbb"> </span>Secret(<span style="color:#666">*</span><span style="color:#b44">b&#34;Enigma&#34;</span>);<span style="color:#bbb">
-</span><span style="color:#bbb">    </span>secret<span style="color:#bbb">
-</span><span style="color:#bbb"></span>}<span style="color:#bbb">
-</span><span style="color:#bbb">
-</span><span style="color:#bbb"></span><span style="color:#a2f;font-weight:bold">fn</span> <span style="color:#00a000">main</span>()<span style="color:#bbb"> </span>{<span style="color:#bbb">
-</span><span style="color:#bbb">    </span><span style="color:#a2f;font-weight:bold">let</span><span style="color:#bbb"> </span>secret<span style="color:#bbb"> </span><span style="color:#666">=</span><span style="color:#bbb"> </span>get_secret();<span style="color:#bbb">
-</span><span style="color:#bbb">    </span><span style="color:#a2f;font-weight:bold">let</span><span style="color:#bbb"> </span>pointer<span style="color:#bbb"> </span><span style="color:#666">=</span><span style="color:#bbb"> </span>secret.<span style="color:#666">0.</span>as_ptr();<span style="color:#bbb">
-</span><span style="color:#bbb">
-</span><span style="color:#bbb">    </span>println<span style="color:#666">!</span>(<span style="color:#b44">&#34;Pointer when using: {:p}&#34;</span>,<span style="color:#bbb"> </span>secret.<span style="color:#666">0.</span>as_ptr());<span style="color:#bbb">
-</span><span style="color:#bbb">    </span>println<span style="color:#666">!</span>(<span style="color:#b44">&#34;Using secret to do stuff: {:?}&#34;</span>,<span style="color:#bbb"> </span>secret);<span style="color:#bbb">
-</span><span style="color:#bbb">
-</span><span style="color:#bbb">    </span>println<span style="color:#666">!</span>(<span style="color:#b44">&#34;Dropping in 3,2...&#34;</span>);<span style="color:#bbb">
-</span><span style="color:#bbb">    </span>drop(secret);<span style="color:#bbb">
-</span><span style="color:#bbb">    </span>println<span style="color:#666">!</span>(<span style="color:#b44">&#34;Drop concluded.&#34;</span>);<span style="color:#bbb">
-</span><span style="color:#bbb">
-</span><span style="color:#bbb">    </span>println<span style="color:#666">!</span>(<span style="color:#b44">&#34;Memory Status: {:?}&#34;</span>,<span style="color:#bbb"> </span><span style="color:#a2f;font-weight:bold">unsafe</span><span style="color:#bbb"> </span>{<span style="color:#bbb">
-</span><span style="color:#bbb">        </span>core::slice::from_raw_parts(pointer,<span style="color:#bbb"> </span><span style="color:#666">6</span>)<span style="color:#bbb">
-</span><span style="color:#bbb">    </span>});<span style="color:#bbb">
-</span><span style="color:#bbb"></span>}<span style="color:#bbb">
-</span></code></pre></div><p>Output will be somehing close to:</p>
-<pre><code>Pointer when using: 0x7ffdb3a07ce8
+<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-rust" data-lang="rust"><span style="display:flex;"><span><span style="color:#a2f;font-weight:bold">use</span><span style="color:#bbb"> </span>zeroize::Zeroize;<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span><span style="color:#080">#[derive(Debug)]</span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span><span style="color:#a2f;font-weight:bold">struct</span> <span style="color:#00f">Secret</span>([<span style="color:#0b0;font-weight:bold">u8</span>;<span style="color:#bbb"> </span><span style="color:#666">6</span>]);<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span><span style="color:#a2f;font-weight:bold">impl</span><span style="color:#bbb"> </span><span style="color:#a2f">Drop</span><span style="color:#bbb"> </span><span style="color:#a2f;font-weight:bold">for</span><span style="color:#bbb"> </span>Secret<span style="color:#bbb"> </span>{<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#a2f;font-weight:bold">fn</span> <span style="color:#00a000">drop</span>(<span style="color:#666">&amp;</span><span style="color:#a2f;font-weight:bold">mut</span><span style="color:#bbb"> </span>self)<span style="color:#bbb"> </span>{<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">        </span>self.<span style="color:#666">0.</span>zeroize();<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span>}<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span>}<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span><span style="color:#a2f;font-weight:bold">fn</span> <span style="color:#00a000">get_secret</span>()<span style="color:#bbb"> </span>-&gt; <span style="color:#00f">Secret</span><span style="color:#bbb"> </span>{<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#a2f;font-weight:bold">let</span><span style="color:#bbb"> </span>secret<span style="color:#bbb"> </span><span style="color:#666">=</span><span style="color:#bbb"> </span>Secret(<span style="color:#666">*</span><span style="color:#b44">b&#34;Enigma&#34;</span>);<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span>secret<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span>}<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span><span style="color:#a2f;font-weight:bold">fn</span> <span style="color:#00a000">main</span>()<span style="color:#bbb"> </span>{<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#a2f;font-weight:bold">let</span><span style="color:#bbb"> </span>secret<span style="color:#bbb"> </span><span style="color:#666">=</span><span style="color:#bbb"> </span>get_secret();<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#a2f;font-weight:bold">let</span><span style="color:#bbb"> </span>pointer<span style="color:#bbb"> </span><span style="color:#666">=</span><span style="color:#bbb"> </span>secret.<span style="color:#666">0.</span>as_ptr();<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span>println!(<span style="color:#b44">&#34;Pointer when using: {:p}&#34;</span>,<span style="color:#bbb"> </span>secret.<span style="color:#666">0.</span>as_ptr());<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span>println!(<span style="color:#b44">&#34;Using secret to do stuff: {:?}&#34;</span>,<span style="color:#bbb"> </span>secret);<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span>println!(<span style="color:#b44">&#34;Dropping in 3,2...&#34;</span>);<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#a2f">drop</span>(secret);<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span>println!(<span style="color:#b44">&#34;Drop concluded.&#34;</span>);<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span>println!(<span style="color:#b44">&#34;Memory Status: {:?}&#34;</span>,<span style="color:#bbb"> </span><span style="color:#a2f;font-weight:bold">unsafe</span><span style="color:#bbb"> </span>{<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">        </span>core::slice::from_raw_parts(pointer,<span style="color:#bbb"> </span><span style="color:#666">6</span>)<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span>});<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span>}<span style="color:#bbb">
+</span></span></span></code></pre></div><p>Output will be somehing close to:</p>
+<pre tabindex="0"><code>Pointer when using: 0x7ffdb3a07ce8
 Using secret to do stuff: Secret([69, 110, 105, 103, 109, 97])
 Dropping in 3,2...
 Drop concluded.
